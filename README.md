@@ -14,7 +14,10 @@ One must have vagrant and virtualbox installed for this to work.
 
 ```vagrant up```
 
+```vagrant ssh``` to connect to the Vagrantbox.
+
 Inside the Vagrantbox:
+
 ```sudo python3 /app/basicTest.py```
 
 ```cd ~```
