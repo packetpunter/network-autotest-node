@@ -2,35 +2,36 @@ import logging
 import speedtest
 import testDirectives
 import datetime
+import time
 import subprocess
 from scapy.all import *
 
 logging.getLogger("speedtestLog")
-now = datetime.now()
-file_date = now.strftime("%Y-%m-%dT%H:%m")
 
-logging.basicConfig(filename="speedtestAuto-" + file_date + ".log", level=logging.DEBUG)
+#using time.time() in datetime.datetime allowes newest timestamps each run
+file_date = datetime.fromtimestamp(time.time()).isoformat() 
+
+logging.basicConfig(filename="/app/autonetscript-" + file_date + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 speedtest = speedtest.Speedtest()
 speedtest.get_best_server()
-speedtest.download(threads=3)
-speedtest.upload(threads=3)
+speedtest.download()
+speedtest.upload()
 speedtest.results.share()
 speedResults = speedtest.results.dict()
+srPingMS = str(speedResults['ping'])
+srURL = str(speedResults['share'])
 
-srURL = speedResults['share']
-srPingMS = speedResults['ping']
-srDownloadSpeed = speedResults['download']
-srUploadSpeed = speedResults['upload']
-srDownloadSpeed = srDownloadSpeed / 1024/1024
-srUploadSpeed = srUploadSpeed / 1024/1024
+dlSpeed = '{:05.2f}'.format(speedResults['download']/1024/1024)
+upSpeed = '{:05.2f}'.format(speedResults['upload']/1024/1024)
 
-logging.info("Speedtest completed. Pic URL: " + srURL)
-logging.info("Download Speed: " + str(srDownloadSpeed) + "mbps")
-logging.info("Upload Speed: " + str(srUploadSpeed) + "mbps")
+logging.info("Speedtest.net speedtest completed. Pic URL: " + srURL)
+logging.info("Speedtest.net Download Speed: " + str(dlSpeed) + "mbps")
+logging.info("Speedtest.net Upload Speed: " + str(upSpeed) + "mbps")
+logging.info("Ping: " + str(srPingMS) + "ms")
 
-tr_answer, tr_unanswered = traceroute(testDirectives.HOST_MTR_1, testDirects.HOST_MTR_2)
-graphFileName = "tracerouteGraph-" + file_date + ".svg"
+tr_answer, tr_unanswered = traceroute([testDirectives.HOST_MTR_1, testDirectives.HOST_MTR_2, testDirectives.HOST_PERFSONAR])
+graphFileName = "tracerouteGraph-All-" + file_date + ".svg"
 graph = tr_answer.graph(target="/app/"+graphFileName)
 
 logging.info("Saved traceroute to " + graphFileName)
@@ -40,7 +41,6 @@ result = str(resultBytes)
 dhcp_server = result.split('  ')[7].split(' ')[3].split('\\n')[0]
 
 logging.critical("Found DHCP server at " + dhcp_server)
-
 
 
 
