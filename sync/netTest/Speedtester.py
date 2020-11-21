@@ -1,6 +1,8 @@
 class Speedtester:
     def __init__(self):
         import speedtest
+        import configparser
+        import 
         self.speedtest = speedtest.Speedtest()
         self.speedtest.get_best_server()
 
