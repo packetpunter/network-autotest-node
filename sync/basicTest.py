@@ -37,7 +37,7 @@ graph = tr_answer.graph(target="/app/"+graphFileName)
 logging.info("Saved traceroute to " + graphFileName)
 
 resultBytes = subprocess.run(["nmap","--script","broadcast-dhcp-discover"], stdout=subprocess.PIPE)
-result = str(resultBytes)
+result = str(resultBytes.stdout)
 dhcp_server = result.split('  ')[7].split(' ')[3].split('\\n')[0]
 
 logging.critical("Found DHCP server at " + dhcp_server)
