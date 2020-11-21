@@ -7,9 +7,8 @@ import subprocess
 from scapy.all import *
 
 logging.getLogger("speedtestLog")
-
-#using time.time() in datetime.datetime allowes newest timestamps each run
-file_date = datetime.fromtimestamp(time.time()).isoformat() 
+__TIME_FORMAT = "%Y-%m-%dT%H-%M-%S"
+file_date = datetime.now().strftime(__TIME_FORMAT)
 
 logging.basicConfig(filename="/app/autonetscript-" + file_date + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
 
