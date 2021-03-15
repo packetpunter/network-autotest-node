@@ -1,7 +1,7 @@
 asn1crypto==0.24.0
 cffi==1.11.5
 configobj==5.0.6
-cryptography==3.2
+cryptography==3.3.2
 dbus-python==1.2.4
 decorator==4.2.1
 gpg==1.10.0
